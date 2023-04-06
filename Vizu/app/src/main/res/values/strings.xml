@@ -2,4 +2,6 @@
     <string name="app_name">Vizu</string>
     <string name="channel_name">My Channel Name</string>
     <string name="channel_description">Channel description</string>
+    <string name="notification_title">NOTIFICAÇÃO</string>
+    <string name="notification_message">SUA NOTIFICAÇÃO CHEGOU</string>
 </resources>
