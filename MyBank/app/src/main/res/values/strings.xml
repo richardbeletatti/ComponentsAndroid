@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyBank</string>
+    <string name="title">MyBank</string>
+    <string name="subtitle">Sua informação enviada com segurança</string>
+    <string name="deposit">Digite sua informação</string>
+    <string name="save">Salvar</string>
+</resources>
