@@ -1,26 +1,16 @@
 package com.richardbeletatti.vizu
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,13 +18,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.richardbeletatti.vizu.ui.theme.VizuTheme
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             VizuApp()
         }
@@ -43,6 +35,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun VizuApp() {
+    val savedValue = remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    val contentUri = Uri.parse("content://com.richardbeletatti.provider/mystring")
+    val projection = arrayOf("mystring")
+    val cursor = context.contentResolver.query(contentUri, projection, null, null, null)
+
+    Log.d("CURSOR", "CHEGOU NO CURSOR ")
+    if (cursor != null && cursor.moveToFirst()) {
+        val value = cursor.getColumnIndex("mystring")
+        val myString = cursor.getString(value)
+        savedValue.value = myString
+        Log.d("CURSOR", "ENTROU !")
+        Log.d("VALOR", "${savedValue.value}")
+    }
+    Log.d("CURSOR", "NÃO ENTROU =( ")
+    cursor?.close()
+
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -53,6 +64,7 @@ fun VizuApp() {
             fontSize = 24.sp,
             modifier = Modifier.padding(50.dp, 10.dp)
         )
+//        Text(text = content)
     }
 }
 

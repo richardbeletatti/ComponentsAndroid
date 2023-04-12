@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PROVIDER" />
+    <uses-permission android:name="com.richardbeletatti.permission.ACCESS_PROVIDER" />
 
     <application
         android:allowBackup="true"
@@ -33,10 +35,5 @@
                 <action android:name="com.richardbeletatti.vizu.SEND_MESSAGE"/>
             </intent-filter>
         </receiver>
-<!--        <provider-->
-<!--            android:name=".MyContentProvider"-->
-<!--            android:authorities="com.seuapp.provider"-->
-<!--            android:exported="false" />-->
     </application>
-
 </manifest>
