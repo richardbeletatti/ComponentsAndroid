@@ -2,9 +2,11 @@ package com.richardbeletatti.mybank
 
 import android.content.ComponentName
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -85,7 +87,12 @@ fun MyBankApp() {
                 val values = ContentValues().apply {
                     put("mystring", savedValue.value)
                 }
-                context.contentResolver.insert(Uri.parse("content://com.richardbeletatti.provider/mystring"), values)
+                val uri = Uri.parse("content://com.richardbeletatti.provider")
+                context.contentResolver.insert(uri, values)
+
+                val sharedPrefs = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+                sharedPrefs.edit().putBoolean("is_value_saved", true).apply()
+
             },
 
             modifier = Modifier

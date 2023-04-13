@@ -27,9 +27,9 @@
             </intent-filter>
         </activity>
         <provider
-            android:name="com.richardbeletatti.mybank.MyBankContentProvider"
-            android:authorities="com.richardbeletatti.mybank.MyBankContentProvider"
-            android:exported="true"
-            android:grantUriPermissions="true"/>
+            android:name=".MyBankContentProvider"
+            android:authorities="com.richardbeletatti.provider"
+            android:exported="true" />
+<!--            android:permission="com.richardbeletatti.mybank.permission.ACCESS_PROVIDER" />-->
     </application>
 </manifest>
