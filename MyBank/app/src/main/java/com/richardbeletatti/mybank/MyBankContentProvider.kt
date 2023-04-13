@@ -33,21 +33,6 @@ class MyBankContentProvider : ContentProvider() {
         return null
     }
 
-    fun getSavedValue(): String {
-        val file = File(context?.filesDir, "meuArquivo.txt")
-        val inputStream = FileInputStream(file)
-        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        val stringBuilder = StringBuilder()
-        var line: String?
-        while (bufferedReader.readLine().also { line = it } != null) {
-            stringBuilder.append(line)
-        }
-        bufferedReader.close()
-        inputStream.close()
-
-        return stringBuilder.toString()
-    }
-
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
         Log.d("INSERT", "INSERT URI: $uri")
         Log.d("INSERT", "INSERT VALUES: $values")

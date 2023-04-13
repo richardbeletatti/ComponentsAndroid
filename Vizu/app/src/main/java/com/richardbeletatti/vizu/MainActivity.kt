@@ -39,7 +39,7 @@ fun VizuApp() {
     val savedValue = remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    val contentUri = Uri.parse("content://com.richardbeletatti.provider/mystring")
+    val contentUri = Uri.parse("content://com.richardbeletatti.mybank/mystring")
     val projection = arrayOf("mystring")
     val cursor = context.contentResolver.query(contentUri,
         projection,

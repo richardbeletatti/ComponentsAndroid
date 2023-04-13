@@ -8,8 +8,7 @@
 
     <permission
         android:name="com.richardbeletatti.provider.permission.ACCESS_PROVIDER"
-        android:protectionLevel="signature" />
-
+        android:protectionLevel="normal" />
 
     <application
         android:allowBackup="true"
@@ -32,7 +31,7 @@
         </activity>
         <provider
             android:name="com.richardbeletatti.mybank.MyBankContentProvider"
-            android:authorities="com.richardbeletatti.provider"
+            android:authorities="com.richardbeletatti.mybank"
             android:enabled="true"
             android:exported="true"
             android:permission="com.richardbeletatti.provider.permission.ACCESS_PROVIDER"
