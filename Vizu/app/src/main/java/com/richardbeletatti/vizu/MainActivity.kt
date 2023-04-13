@@ -39,47 +39,23 @@ fun VizuApp() {
     val savedValue = remember { mutableStateOf("") }
     val context = LocalContext.current
 
-//    val contentUri = Uri.parse("content://com.richardbeletatti.mybank.MyBankContentProvider/mystring")
-//    val projection = arrayOf("mystring")
-//    val cursor = context.contentResolver.query(contentUri, projection, null, null, null)
-//
-//    Log.d("CURSOR", "CHEGOU NO CURSOR ")
-//    if (cursor != null && cursor.moveToFirst()) {
-//        val value = cursor.getColumnIndex("mystring")
-//        val myString = cursor.getString(value)
-//        savedValue.value = myString
-//        Log.d("CURSOR", "ENTROU !")
-//        Log.d("VALOR", "${savedValue.value}")
-//    }
-//    Log.d("CURSOR", "NÃO ENTROU =( ")
-//    cursor?.close()
+    val contentUri = Uri.parse("content://com.richardbeletatti.provider/mystring")
+    val projection = arrayOf("mystring")
+    val cursor = context.contentResolver.query(contentUri,
+        projection,
+        null,
+        null,
+        null)
 
-    val sharedPrefs = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-
-    if (sharedPrefs.getBoolean("is_value_saved", false)) {
-        // O valor foi salvo, permitir acesso ao ContentProvider
-        val cursor = context.contentResolver.query(
-            Uri.parse("content://com.richardbeletatti.provider/mystring"),
-            null,
-            null,
-            null,
-            null
-        )
-
-        cursor?.use {
-            if (it.moveToFirst()) {
-                var resultGetColumnIndex = it.getColumnIndex("mystring")
-                val value = it.getString(resultGetColumnIndex)
-                savedValue.value = value ?: "ESTÁ VAZIO =("
-            }
-        }
-    } else {
-        Log.d("ERROR", "AINDA NÃO FOI SALVO A MENSAGEM !!!")
-        // O valor ainda não foi salvo, mostrar mensagem de erro ou impedir acesso ao ContentProvider
-        // ...
+    Log.d("CURSOR", "CHEGOU NO CURSOR: ${cursor}")
+    if (cursor != null && cursor.moveToFirst()) {
+        Log.d("CURSOR", "ENTROU ! ")
+        val value = cursor.getColumnIndex("mystring")
+        val myString = cursor.getString(value)
+        savedValue.value = myString
+        Log.d("VALOR", "${savedValue.value}")
     }
-
-
+    cursor?.close()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -91,7 +67,7 @@ fun VizuApp() {
             fontSize = 24.sp,
             modifier = Modifier.padding(50.dp, 10.dp)
         )
-        Text(text = "Valor salvo: $savedValue.value")
+        Text(text = "Valor salvo: ${savedValue.value}")
     }
 }
 

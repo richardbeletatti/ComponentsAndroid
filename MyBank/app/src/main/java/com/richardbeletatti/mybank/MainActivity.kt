@@ -79,7 +79,10 @@ fun MyBankApp() {
                 val intent = Intent().apply {
                     action = "com.richardbeletatti.vizu.SEND_MESSAGE"
                     putExtra("mystring", savedValue.value)
-                    component = ComponentName("com.richardbeletatti.vizu", "com.richardbeletatti.vizu.MyBroadcastReceiver")
+                    component = ComponentName(
+                        "com.richardbeletatti.vizu",
+                        "com.richardbeletatti.vizu.MyBroadcastReceiver"
+                    )
                 }
                 context.sendBroadcast(intent)
 
@@ -87,12 +90,8 @@ fun MyBankApp() {
                 val values = ContentValues().apply {
                     put("mystring", savedValue.value)
                 }
-                val uri = Uri.parse("content://com.richardbeletatti.provider")
+                val uri = Uri.parse("content://com.richardbeletatti.provider/mystring")
                 context.contentResolver.insert(uri, values)
-
-                val sharedPrefs = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-                sharedPrefs.edit().putBoolean("is_value_saved", true).apply()
-
             },
 
             modifier = Modifier

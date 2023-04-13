@@ -23,7 +23,9 @@ class MyBankContentProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor? {
         val cursor = MatrixCursor(arrayOf("mystring"))
-        cursor.addRow(arrayOf("A"))
+        // Recuperar a informação salva, como do banco de dados
+        val savedValue = "Valor recuperado"
+        cursor.addRow(arrayOf(savedValue))
         return cursor
     }
 
@@ -47,10 +49,21 @@ class MyBankContentProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        Log.d("INSERT", "INSERT O VALOR: $values")
+        Log.d("INSERT", "INSERT URI: $uri")
+        Log.d("INSERT", "INSERT VALUES: $values")
+
+        if (values == null || !values.containsKey("mystring")) {
+            Log.e("INSERT", "ContentValues nulo ou não contém a chave 'mystring'")
+            return null
+        }
 
         // Extrai o valor do ContentValues
         val myValue = values?.getAsString("mystring") ?: ""
+
+        if (myValue.isNullOrEmpty()) {
+            Log.e("INSERT", "Valor passado está vazio ou nulo")
+            return null
+        }
 
         // Cria um arquivo na memória interna do dispositivo
         val file = File(context?.filesDir, "meuArquivo.txt")
@@ -63,6 +76,8 @@ class MyBankContentProvider : ContentProvider() {
 
         // Fecha o FileOutputStream
         outputStream.close()
+
+        Log.d("INSERT", "Valor salvo no arquivo com sucesso")
 
         // Retorna a URI do novo registro inserido (neste caso, não estamos retornando uma URI)
         return null
