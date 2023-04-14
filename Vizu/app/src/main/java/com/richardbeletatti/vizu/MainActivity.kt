@@ -1,5 +1,7 @@
 package com.richardbeletatti.vizu
 
+import android.database.ContentObserver
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,20 +40,45 @@ fun VizuApp() {
 
     val contentUri = Uri.parse("content://com.richardbeletatti.mybank/mystring")
     val projection = arrayOf("mystring")
-    val cursor = context.contentResolver.query(contentUri,
-        projection,
-        null,
-        null,
-        null)
+    var cursor by remember { mutableStateOf<Cursor?>(null) }
+
+    LaunchedEffect(Unit) {
+        val observer = object : ContentObserver(null) {
+            override fun onChange(selfChange: Boolean) {
+                val newCursor = context.contentResolver.query(
+                    contentUri,
+                    projection,
+                    null,
+                    null,
+                    null
+                )
+                cursor?.close()
+                cursor = newCursor
+            }
+        }
+
+        context.contentResolver.registerContentObserver(
+            contentUri,
+            true,
+            observer
+        )
+        val newCursor = context.contentResolver.query(
+            contentUri,
+            projection,
+            null,
+            null,
+            null
+        )
+        cursor = newCursor
+    }
 
     Log.d("CURSOR", "CHEGOU NO CURSOR: ${cursor}")
-    if (cursor != null && cursor.moveToFirst()) {
-        Log.d("CURSOR", "ENTROU ! ")
-        val value = cursor.getColumnIndex("column1")
-        val myString = cursor.getString(value)
+    if (cursor != null && cursor!!.moveToFirst()) {
+        val value = cursor!!.getColumnIndex("column1")
+        val myString = cursor!!.getString(value)
         savedValue.value = myString
     }
-    cursor?.close()
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -59,10 +87,14 @@ fun VizuApp() {
     ) {
         Text(
             text = stringResource(R.string.app_name),
-            fontSize = 24.sp,
+            fontSize = 32.sp,
             modifier = Modifier.padding(50.dp, 10.dp)
         )
-        Text(text = "Valor salvo: ${savedValue.value}")
+        Text(
+            text = "Valor salvo: ${savedValue.value}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+        )
     }
 }
 

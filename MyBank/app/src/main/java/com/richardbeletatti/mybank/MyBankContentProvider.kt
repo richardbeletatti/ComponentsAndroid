@@ -18,6 +18,7 @@ class MyBankContentProvider : ContentProvider() {
     }
 
     private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
+    private var myValue: String? = null
 
     override fun onCreate(): Boolean {
         uriMatcher.addURI(uri, path, code)
@@ -36,7 +37,7 @@ class MyBankContentProvider : ContentProvider() {
                 Log.d(TAG, "query - match = 1")
                 val cursor = MatrixCursor(arrayOf("column1"))
                 cursor.newRow()
-                    .add("column1", "This is a simple test")
+                    .add("column1", myValue)
                 cursor
             }
             else -> {
@@ -47,7 +48,7 @@ class MyBankContentProvider : ContentProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        return null
+        return "vnd.android.cursor.item/com.richardbeletatti.mybank.${uri.lastPathSegment}_${System.currentTimeMillis()}"
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
@@ -60,7 +61,7 @@ class MyBankContentProvider : ContentProvider() {
         }
 
         // Extrai o valor do ContentValues
-        val myValue = values?.getAsString("mystring") ?: ""
+        myValue = values?.getAsString("mystring") ?: ""
 
         if (myValue.isNullOrEmpty()) {
             Log.e("INSERT", "Valor passado está vazio ou nulo")
@@ -70,11 +71,11 @@ class MyBankContentProvider : ContentProvider() {
         // Cria um arquivo na memória interna do dispositivo
         val file = File(context?.filesDir, "meuArquivo.txt")
 
-        // Abre um FileOutputStream para escrever os valores no arquivo
+        // Abre um FileOutputStream para escrever os valor's no arquivo
         val outputStream = FileOutputStream(file)
 
         // Escreve o valor no arquivo
-        outputStream.write(myValue.toByteArray())
+        outputStream.write(myValue!!.toByteArray())
 
         // Fecha o FileOutputStream
         outputStream.close()
