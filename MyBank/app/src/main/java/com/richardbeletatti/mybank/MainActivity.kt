@@ -90,7 +90,7 @@ fun MyBankApp() {
                 val values = ContentValues().apply {
                     put("mystring", savedValue.value)
                 }
-                val uri = Uri.parse("content://com.richardbeletatti.provider/mystring")
+                val uri = Uri.parse("content://com.richardbeletatti.mybank/mystring")
                 context.contentResolver.insert(uri, values)
             },
 
