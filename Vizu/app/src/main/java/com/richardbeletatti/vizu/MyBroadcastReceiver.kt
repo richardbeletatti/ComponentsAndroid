@@ -18,7 +18,7 @@ import kotlinx.coroutines.channels.Channel
 class MyBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val savedValue = intent.getStringExtra("MY_STRING")
+        val savedValue = intent.getStringExtra("mystring")
         Log.d("MyBroadcastReceiver", "Valor recebido: $savedValue")
 
         val notificationId = 1 // ID único para a notificação

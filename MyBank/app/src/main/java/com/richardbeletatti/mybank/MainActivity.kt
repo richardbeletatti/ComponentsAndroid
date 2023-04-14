@@ -1,8 +1,12 @@
 package com.richardbeletatti.mybank
 
 import android.content.ComponentName
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -71,13 +75,25 @@ fun MyBankApp() {
             onClick = {
                 savedValue.value = textFieldState.text
 
+                // BROADCAST
                 val intent = Intent().apply {
                     action = "com.richardbeletatti.vizu.SEND_MESSAGE"
-                    putExtra("MY_STRING", savedValue.value)
-                    component = ComponentName("com.richardbeletatti.vizu", "com.richardbeletatti.vizu.MyBroadcastReceiver")
+                    putExtra("mystring", savedValue.value)
+                    component = ComponentName(
+                        "com.richardbeletatti.vizu",
+                        "com.richardbeletatti.vizu.MyBroadcastReceiver"
+                    )
                 }
                 context.sendBroadcast(intent)
+
+                // CONTENT PROVIDER
+                val values = ContentValues().apply {
+                    put("mystring", savedValue.value)
+                }
+                val uri = Uri.parse("content://com.richardbeletatti.provider/mystring")
+                context.contentResolver.insert(uri, values)
             },
+
             modifier = Modifier
                 .padding(8.dp)
                 .width(200.dp)
