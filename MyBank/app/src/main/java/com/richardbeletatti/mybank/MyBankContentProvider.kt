@@ -10,8 +10,17 @@ import android.util.Log
 import java.io.*
 
 class MyBankContentProvider : ContentProvider() {
+    companion object {
+        private const val TAG = "MyBankContentProvider"
+        private const val uri = "com.richardbeletatti.mybank"
+        private const val path = "mystring"
+        private const val code = 1
+    }
+
+    private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
     override fun onCreate(): Boolean {
+        uriMatcher.addURI(uri, path, code)
         return true
     }
 
@@ -22,11 +31,19 @@ class MyBankContentProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        val cursor = MatrixCursor(arrayOf("mystring"))
-        // Recuperar a informação salva, como do banco de dados
-        val savedValue = "Valor recuperado"
-        cursor.addRow(arrayOf(savedValue))
-        return cursor
+        return when (uriMatcher.match(uri)) {
+            code -> {
+                Log.d(TAG, "query - match = 1")
+                val cursor = MatrixCursor(arrayOf("column1"))
+                cursor.newRow()
+                    .add("column1", "This is a simple test")
+                cursor
+            }
+            else -> {
+                Log.w(TAG, "query - match = NO MATCH")
+                null
+            }
+        }
     }
 
     override fun getType(uri: Uri): String? {

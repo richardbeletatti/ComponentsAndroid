@@ -1,6 +1,5 @@
 package com.richardbeletatti.vizu
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,9 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.richardbeletatti.vizu.ui.theme.VizuTheme
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +46,9 @@ fun VizuApp() {
     Log.d("CURSOR", "CHEGOU NO CURSOR: ${cursor}")
     if (cursor != null && cursor.moveToFirst()) {
         Log.d("CURSOR", "ENTROU ! ")
-        val value = cursor.getColumnIndex("mystring")
+        val value = cursor.getColumnIndex("column1")
         val myString = cursor.getString(value)
         savedValue.value = myString
-        Log.d("VALOR", "${savedValue.value}")
     }
     cursor?.close()
 
@@ -70,7 +65,6 @@ fun VizuApp() {
         Text(text = "Valor salvo: ${savedValue.value}")
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
