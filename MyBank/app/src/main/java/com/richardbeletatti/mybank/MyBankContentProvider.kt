@@ -68,6 +68,8 @@ class MyBankContentProvider : ContentProvider() {
             return null
         }
 
+        this.context?.contentResolver?.notifyChange(uri,null)
+
         // Cria um arquivo na memória interna do dispositivo
         val file = File(context?.filesDir, "meuArquivo.txt")
 
